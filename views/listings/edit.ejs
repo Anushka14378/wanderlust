@@ -1,0 +1,117 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+  <div class="col-8 offset-2">
+    <br>
+    <h3>Edit your listing</h3>
+    <br>
+
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" 
+      novalidate class="needs-validation" enctype="multipart/form-data">
+
+      <div class="mb-3">
+        <label class="form-label">Enter Title</label>
+        <input
+          name="listing[title]"
+          value="<%= listing.title %>"
+          type="text"
+          class="form-control"
+          required
+        >
+        <div class="valid-feedback">Enter valid title</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Enter Description</label>
+        <textarea
+          name="listing[description]"
+          class="form-control"
+          required
+        ><%= listing.description %></textarea>
+         <div class="invalid-feedback">Please enter a short description.</div>
+      </div>
+
+      <!-- Current Image -->
+      <div class="mb-3">
+        <label class="form-label">Original Image</label><br>
+        <img
+          src="<%= originalImageUrl%>"
+          >
+      </div>
+
+      <!-- New Image URL -->
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload New Image</label>
+        <input
+          name="listing[image]"
+          type="file"
+          class="form-control"
+        >
+        <div class="invalid-feedback">Please enter a valid url.</div>
+      </div>
+      <div class="mb-3">
+  <label class="form-label">Categories</label>
+  <div class="d-flex flex-wrap gap-3">
+    <% const allowedCategories = ['Trending','Farms','Rooms','Mountains','Cities','Beach','Cabins','Lakeside','Views']; %>
+    <% allowedCategories.forEach(cat => { %>
+      <div class="form-check">
+        <input 
+          class="form-check-input" 
+          type="checkbox" 
+          name="categories" 
+          value="<%= cat %>" 
+          id="cat-<%= cat %>"
+          <% if (listing.categories.includes(cat)) { %> checked <% } %>>
+        <label class="form-check-label" for="cat-<%= cat %>"><%= cat %></label>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+      <div class="row">
+        <div class="mb-3 col-md-4">
+          <label class="form-label">Enter Price</label>
+          <input
+            name="listing[price]"
+            value="<%= listing.price %>"
+            type="number"
+            class="form-control"
+            required
+          >
+          <div class="invalid-feedback">Enter a valid price.</div>
+        </div>
+
+        <div class="mb-3 col-md-8">
+          <label class="form-label">Enter Country</label>
+          <input
+            name="listing[country]"
+            value="<%= listing.country %>"
+            type="text"
+            class="form-control"
+            required
+          >
+          <div class="invalid-feedback">Enter a valid country.</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Enter Location</label>
+        <input
+          name="listing[location]"
+          value="<%= listing.location %>"
+          type="text"
+          class="form-control"
+          required
+        >
+        <div class="invalid-feedback">Enter a valid Location.</div>
+      </div>
+
+      <br>
+
+      <button class="btn btn-dark add-btn">
+        Edit
+      </button>
+
+    </form>
+  </div>
+</div>

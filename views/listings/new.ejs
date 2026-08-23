@@ -1,0 +1,252 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-body p-4">
+
+          <h2 class="card-title mb-4 text-center" style="color:#fb717a;">
+            Create a New Listing
+          </h2>
+
+          <form
+            action="/listings"
+            method="POST"
+            enctype="multipart/form-data"
+            class="needs-validation"
+            novalidate
+          >
+
+            <!-- Title -->
+            <div class="mb-3">
+              <label class="form-label">Title</label>
+              <input
+                type="text"
+                name="listing[title]"
+                class="form-control"
+                placeholder="Enter title"
+                required
+              >
+              <div class="invalid-feedback">
+                Please enter a title.
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea
+                name="listing[description]"
+                class="form-control"
+                rows="4"
+                required
+              ></textarea>
+              <div class="invalid-feedback">
+                Please enter description.
+              </div>
+            </div>
+
+            <!-- Image -->
+            <div class="mb-3">
+              <label class="form-label">Upload Image</label>
+              <input
+                type="file"
+                name="listing[image]"
+                class="form-control"
+                required
+              >
+            </div>
+
+            <!-- Categories -->
+            <div class="mb-3">
+              <label class="form-label">Categories</label>
+
+              <div class="d-flex flex-wrap gap-3">
+
+                <!-- Trending -->
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="listing[categories][]"
+                    value="Trending"
+                    id="trending"
+                  >
+                  <label class="form-check-label" for="trending">
+                    Trending
+                  </label>
+                </div>
+
+                <!-- Farms -->
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="listing[categories][]"
+                    value="Farms"
+                    id="farms"
+                  >
+                  <label class="form-check-label" for="farms">
+                    Farms
+                  </label>
+                </div>
+
+                <!-- Rooms -->
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="listing[categories][]"
+                    value="Rooms"
+                    id="rooms"
+                  >
+                  <label class="form-check-label" for="rooms">
+                    Rooms
+                  </label>
+                </div>
+
+                <!-- Mountains -->
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="listing[categories][]"
+                    value="Mountains"
+                    id="mountains"
+                  >
+                  <label class="form-check-label" for="mountains">
+                    Mountains
+                  </label>
+                </div>
+
+                <!-- Cities -->
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="listing[categories][]"
+                    value="Cities"
+                    id="cities"
+                  >
+                  <label class="form-check-label" for="cities">
+                    Cities
+                  </label>
+                </div>
+
+                <!-- Beach -->
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="listing[categories][]"
+                    value="Beach"
+                    id="beach"
+                  >
+                  <label class="form-check-label" for="beach">
+                    Beach
+                  </label>
+                </div>
+
+                <!-- Cabins -->
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="listing[categories][]"
+                    value="Cabins"
+                    id="cabins"
+                  >
+                  <label class="form-check-label" for="cabins">
+                    Cabins
+                  </label>
+                </div>
+
+                <!-- Lakeside -->
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="listing[categories][]"
+                    value="Lakeside"
+                    id="lakeside"
+                  >
+                  <label class="form-check-label" for="lakeside">
+                    Lakeside
+                  </label>
+                </div>
+
+                <!-- Views -->
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="listing[categories][]"
+                    value="Views"
+                    id="views"
+                  >
+                  <label class="form-check-label" for="views">
+                    Views
+                  </label>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Price & Location -->
+            <div class="row">
+
+              <!-- Price -->
+              <div class="col-md-4 mb-3">
+                <label class="form-label">Price</label>
+                <input
+                  type="number"
+                  name="listing[price]"
+                  class="form-control"
+                  required
+                  min="0"
+                >
+              </div>
+
+              <!-- Location -->
+              <div class="col-md-8 mb-3">
+                <label class="form-label">Location</label>
+                <input
+                  type="text"
+                  name="listing[location]"
+                  class="form-control"
+                  required
+                >
+              </div>
+
+            </div>
+
+            <!-- Country -->
+            <div class="mb-3">
+              <label class="form-label">Country</label>
+              <input
+                type="text"
+                name="listing[country]"
+                class="form-control"
+                required
+              >
+            </div>
+
+            <!-- Submit Button -->
+            <button class="btn btn-primary w-100">
+              Create Listing
+            </button>
+
+          </form>
+
+          <div class="text-center mt-3">
+            <a href="/listings" class="text-decoration-none">
+              ← Back to Listings
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
