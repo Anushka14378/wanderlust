@@ -1,8 +1,10 @@
+require("dotenv").config();
+
 const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = process.env.ATLASDB_URL;
 
 main()
   .then(() => {
@@ -25,11 +27,12 @@ const initDB = async () => {
     owner: "6a681b45ad9bb5071dc8cbbd",
     geometry: {
       type: "Point",
-      coordinates: [77.2090, 28.6139], // Default: Delhi
+      coordinates: [77.2090, 28.6139],
     },
   }));
 
   await Listing.insertMany(data);
+
   console.log("Data was initialized");
   mongoose.connection.close();
 };
