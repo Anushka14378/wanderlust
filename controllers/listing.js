@@ -1,3 +1,8 @@
+module.exports.renderNewForm = (req, res) => {
+    res.render("listings/new.ejs");
+};
+
+
 module.exports.createListing = async (req, res, next) => {
     try {
         const location = req.body.listing.location;
