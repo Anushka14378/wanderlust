@@ -1,4 +1,3 @@
-```js
 const Listing = require("../models/listing.js");
 
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
@@ -10,11 +9,8 @@ const geocodingClient = mbxGeocoding({
 });
 
 
-// =========================
-// INDEX - SHOW ALL LISTINGS
-// =========================
+// INDEX - Show all listings
 module.exports.index = async (req, res) => {
-
     const { category } = req.query;
 
     let allListings;
@@ -27,44 +23,26 @@ module.exports.index = async (req, res) => {
         allListings = await Listing.find({});
     }
 
-    res.render("listings/index.ejs", {
-        allListings
-    });
+    res.render("listings/index.ejs", { allListings });
 };
 
 
-// =========================
-// RENDER NEW LISTING FORM
-// =========================
+// NEW - Show new listing form
 module.exports.renderNewForm = (req, res) => {
-
     res.render("listings/new.ejs");
-
 };
 
 
-// =========================
-// CREATE NEW LISTING
-// =========================
+// CREATE - Create new listing
 module.exports.createListing = async (req, res, next) => {
-
     try {
-
         const location = req.body.listing.location;
 
-        // Check image
         if (!req.file) {
-
-            req.flash(
-                "error",
-                "Please upload an image."
-            );
-
+            req.flash("error", "Please upload an image.");
             return res.redirect("/listings/new");
         }
 
-
-        // Mapbox Geocoding
         const response = await geocodingClient
             .forwardGeocode({
                 query: location,
@@ -72,12 +50,10 @@ module.exports.createListing = async (req, res, next) => {
             })
             .send();
 
-
         if (
             !response.body.features ||
             response.body.features.length === 0
         ) {
-
             req.flash(
                 "error",
                 "Location could not be found. Please enter a valid location."
@@ -86,55 +62,37 @@ module.exports.createListing = async (req, res, next) => {
             return res.redirect("/listings/new");
         }
 
+        const newListing = new Listing(req.body.listing);
 
-        // Create listing
-        const newListing = new Listing(
-            req.body.listing
-        );
-
-
-        // Owner
         newListing.owner = req.user._id;
 
-
-        // Categories
         newListing.categories =
             req.body.listing.categories || [];
 
-
-        // Image from Cloudinary
         newListing.image = {
             url: req.file.path,
             filename: req.file.filename,
         };
 
-
-        // Geometry
         newListing.geometry =
             response.body.features[0].geometry;
 
-
         await newListing.save();
-
 
         req.flash(
             "success",
             "New Listing Created!"
         );
 
-
         res.redirect("/listings");
 
     } catch (error) {
-
         console.log(
             "MAPBOX / CREATE LISTING ERROR:",
             error
         );
 
-
         if (error.statusCode === 429) {
-
             req.flash(
                 "error",
                 "Mapbox request limit reached. Please try again later."
@@ -143,19 +101,14 @@ module.exports.createListing = async (req, res, next) => {
             return res.redirect("/listings/new");
         }
 
-
         next(error);
     }
 };
 
 
-// =========================
-// SHOW SINGLE LISTING
-// =========================
+// SHOW - Show one listing
 module.exports.showListing = async (req, res) => {
-
     const { id } = req.params;
-
 
     const listing = await Listing.findById(id)
         .populate("owner")
@@ -166,9 +119,7 @@ module.exports.showListing = async (req, res) => {
             }
         });
 
-
     if (!listing) {
-
         req.flash(
             "error",
             "Listing you requested does not exist!"
@@ -176,28 +127,20 @@ module.exports.showListing = async (req, res) => {
 
         return res.redirect("/listings");
     }
-
 
     res.render("listings/show.ejs", {
         listing
     });
-
 };
 
 
-// =========================
-// EDIT LISTING FORM
-// =========================
+// EDIT - Show edit form
 module.exports.editListing = async (req, res) => {
-
     const { id } = req.params;
-
 
     const listing = await Listing.findById(id);
 
-
     if (!listing) {
-
         req.flash(
             "error",
             "Listing you requested does not exist!"
@@ -205,38 +148,27 @@ module.exports.editListing = async (req, res) => {
 
         return res.redirect("/listings");
     }
-
 
     const originalImageUrl =
         listing.image && listing.image.url
             ? listing.image.url
             : "";
 
-
     res.render("listings/edit.ejs", {
         listing,
         originalImageUrl
     });
-
 };
 
 
-// =========================
-// UPDATE LISTING
-// =========================
+// UPDATE - Update listing
 module.exports.updateListing = async (req, res, next) => {
-
     try {
-
         const { id } = req.params;
 
-
-        const listing =
-            await Listing.findById(id);
-
+        const listing = await Listing.findById(id);
 
         if (!listing) {
-
             req.flash(
                 "error",
                 "Listing you requested does not exist!"
@@ -245,8 +177,6 @@ module.exports.updateListing = async (req, res, next) => {
             return res.redirect("/listings");
         }
 
-
-        // Update normal fields
         listing.title =
             req.body.listing.title;
 
@@ -262,29 +192,20 @@ module.exports.updateListing = async (req, res, next) => {
         listing.location =
             req.body.listing.location;
 
-
-        // Categories
         listing.categories =
             req.body.categories ||
             req.body.listing.categories ||
             [];
 
-
-        // Update image only if new image uploaded
         if (req.file) {
-
             listing.image = {
                 url: req.file.path,
                 filename: req.file.filename,
             };
-
         }
 
-
-        // Update Mapbox location
         const location =
             req.body.listing.location;
-
 
         const response = await geocodingClient
             .forwardGeocode({
@@ -293,12 +214,10 @@ module.exports.updateListing = async (req, res, next) => {
             })
             .send();
 
-
         if (
             !response.body.features ||
             response.body.features.length === 0
         ) {
-
             req.flash(
                 "error",
                 "Location could not be found. Please enter a valid location."
@@ -309,34 +228,27 @@ module.exports.updateListing = async (req, res, next) => {
             );
         }
 
-
         listing.geometry =
             response.body.features[0].geometry;
 
-
         await listing.save();
-
 
         req.flash(
             "success",
             "Listing Updated!"
         );
 
-
         res.redirect(
             `/listings/${id}`
         );
 
     } catch (error) {
-
         console.log(
             "UPDATE LISTING ERROR:",
             error
         );
 
-
         if (error.statusCode === 429) {
-
             req.flash(
                 "error",
                 "Mapbox request limit reached. Please try again later."
@@ -347,27 +259,19 @@ module.exports.updateListing = async (req, res, next) => {
             );
         }
 
-
         next(error);
     }
-
 };
 
 
-// =========================
-// DELETE LISTING
-// =========================
+// DELETE - Delete listing
 module.exports.destroyListing = async (req, res) => {
-
     const { id } = req.params;
-
 
     const listing =
         await Listing.findByIdAndDelete(id);
 
-
     if (!listing) {
-
         req.flash(
             "error",
             "Listing you requested does not exist!"
@@ -376,14 +280,10 @@ module.exports.destroyListing = async (req, res) => {
         return res.redirect("/listings");
     }
 
-
     req.flash(
         "success",
         "Listing Deleted!"
     );
 
-
     res.redirect("/listings");
-
 };
-```
